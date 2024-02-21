@@ -37,26 +37,18 @@ void input_polygon(polygon* ptr_polygon_i) {
     cout<<"     Введите число сторон: ";
     cin>>(*ptr_polygon_i).n_vertexes;
     //добавить проверку на адекват
-    //cout<<(*ptr_polygon_i).n_vertexes<<endl;
     cout<<"     Введите длину стороны: ";
     cin>>(*ptr_polygon_i).a_side_length;
-    //cout<<(*ptr_polygon_i).a_side_length<<endl;
-
     (*ptr_polygon_i).Perimeter = count_Perimeter(ptr_polygon_i);
-    //cout<<(*ptr_polygon_i).Perimeter<<"\n";
 
     (*ptr_polygon_i).R_spoke = count_R_spoke(ptr_polygon_i);
     (*ptr_polygon_i).S_area = count_S_area(ptr_polygon_i);
 
-    //cout<<(*ptr_polygon_i).R_spoke<<endl;
-    //cout<<(*ptr_polygon_i).S_area<<endl;
-
     cout<<"     Введите x вершины: ";
     cin>>(*ptr_polygon_i).V1.x;
-    //cout<<(*ptr_polygon_i).V1.x<<endl;
+
     cout<<"     Введите y вершины: ";
     cin>>(*ptr_polygon_i).V1.y;
-    //cout<<(*ptr_polygon_i).V1.y<<endl;
 }
 
 void show_polygon(polygon* ptr_polygon_i) {
@@ -79,10 +71,30 @@ void output_polygon() {
 */
 
 void help() {
-    cout<<endl<<
+    cout<<endl<< //1 строчка
     " Чтобы добавить многоугольник, введите n"<<endl<<
     " Чтобы посмотреть характеристики многоугольника, введите s"<<endl<<
-    endl<<"     ";
+    " Чтобы завершить работу, введите (не готово)"<<endl<<
+    //3 смысловые строчки и перевод
+    "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"<< //30-6 штук
+    endl<<" "; //строка набора
+}
+
+void clear() {
+    cout<<"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"; //30 штук
+}
+
+void back_to_menu() {
+    clear();
+    cout<<endl<< //1 строчка
+    " Чтобы выйти в меню, введите m"<<endl<<
+    //1 смысловая строчка и перевод
+    endl; //набор начинается с 4 строчки
+}
+
+void close() {
+    clear();
+    help();
 }
 
 int main()
