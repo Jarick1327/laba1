@@ -34,11 +34,11 @@ double count_S_area(polygon* ptr_polygon_i) {
 }
 
 void input_polygon(polygon* ptr_polygon_i) {
-    cout<<"Введите число сторон: ";
+    cout<<"     Введите число сторон: ";
     cin>>(*ptr_polygon_i).n_vertexes;
     //добавить проверку на адекват
     //cout<<(*ptr_polygon_i).n_vertexes<<endl;
-    cout<<"Введите длину стороны: ";
+    cout<<"     Введите длину стороны: ";
     cin>>(*ptr_polygon_i).a_side_length;
     //cout<<(*ptr_polygon_i).a_side_length<<endl;
 
@@ -51,16 +51,25 @@ void input_polygon(polygon* ptr_polygon_i) {
     //cout<<(*ptr_polygon_i).R_spoke<<endl;
     //cout<<(*ptr_polygon_i).S_area<<endl;
 
-    cout<<"Введите x вершины: ";
+    cout<<"     Введите x вершины: ";
     cin>>(*ptr_polygon_i).V1.x;
     //cout<<(*ptr_polygon_i).V1.x<<endl;
-    cout<<"Введите y вершины: ";
+    cout<<"     Введите y вершины: ";
     cin>>(*ptr_polygon_i).V1.y;
     //cout<<(*ptr_polygon_i).V1.y<<endl;
 }
 
 void show_polygon(polygon* ptr_polygon_i) {
+    cout<<"     Число вершин = "<<(*ptr_polygon_i).n_vertexes<<endl;
+    cout<<"     Длина стороны = "<<(*ptr_polygon_i).a_side_length<<endl;
 
+    cout<<"     Периметр = "<<(*ptr_polygon_i).Perimeter<<"\n";
+
+    //cout<<"       Длина спицы = "<<(*ptr_polygon_i).R_spoke<<endl;
+    cout<<"     Площадь = "<<(*ptr_polygon_i).S_area<<endl;
+
+    cout<<"     Координата x задаваемой вершины: "<<(*ptr_polygon_i).V1.x<<endl;
+    cout<<"     Координата y задаваемой вершины: "<<(*ptr_polygon_i).V1.y<<endl;
 }
 
 /*
@@ -68,15 +77,24 @@ void output_polygon() {
 
 }
 */
+
+void help() {
+    cout<<endl<<
+    " Чтобы добавить многоугольник, введите n"<<endl<<
+    " Чтобы посмотреть характеристики многоугольника, введите s"<<endl<<
+    endl<<"     ";
+}
+
 int main()
 {
     setlocale(LC_ALL, "\Russian");
+    //по умолчанию 30 строчек
 
+    help();
     char input = '0';
     int i_polygones = -1;
     polygon* ptr_polygones;
 
-    cout<<"Если хотите добавить многоугольник, введите n: ";
     cin>>input;
     if (input == 'n') {
         i_polygones = i_polygones+1;
