@@ -12,38 +12,38 @@ struct polygon{
     double S_area;
 };
 //исправить указатели
-double count_Perimeter(int ptr_polygon_i) {
-    double Perimeter = (double)ptr_polygon_i.n_vertexes * ptr_polygon_i.a_side_length;
+double count_Perimeter(polygon* ptr_polygon_i) {
+    double Perimeter = (double)(*ptr_polygon_i).n_vertexes * (*ptr_polygon_i).a_side_length;
     return Perimeter;
 }
 
-double count_R_spoke(int ptr_polygon_i) {
-    R_spoke = ptr_polygon_i.a_side_length/(2*sin(pi/ptr_polygon_i.n_vertexes));
+double count_R_spoke(polygon* ptr_polygon_i) {
+    double R_spoke = (*ptr_polygon_i).a_side_length/(2*sin(pi/(*ptr_polygon_i).n_vertexes));
     return R_spoke;
 }
 
-double count_S_area(int ptr_polygon_i) {
-    S_area = 0.5 * pow(ptr_polygon_i.R_spoke, 2.0) * (double)ptr_polygon_i.n_vertexes * sin((2.0*pi)/(double)ptr_polygon_i.n_vertexes);
+double count_S_area(polygon* ptr_polygon_i) {
+    double S_area = 0.5 * pow( (*ptr_polygon_i).R_spoke, 2.0) * (double) (*ptr_polygon_i).n_vertexes * sin((2.0*pi)/(double) (*ptr_polygon_i).n_vertexes);
     return S_area;
 }
 
-void input_polygon(int ptr_polygon_i) {
+void input_polygon(polygon* ptr_polygon_i) {
     cout<<"¬ведите число сторон: ";
-    cin>>ptr_polygon_i.n_vertexes;
+    cin>>(*ptr_polygon_i).n_vertexes;
     //добавить проверку на адекват
-    //cout<<ptr_polygon_i.n_vertexes<<endl;
+    cout<<(*ptr_polygon_i).n_vertexes<<endl;
     cout<<"¬ведите длину стороны: ";
-    cin>>ptr_polygon_i.a_side_length;
-    //cout<<ptr_polygon_i.a_side_length<<endl;
+    cin>>(*ptr_polygon_i).a_side_length;
+    cout<<(*ptr_polygon_i).a_side_length<<endl;
 
-    ptr_polygon_i.Perimeter = count_Perimeter(ptr_polygon_i);
-    cout<<ptr_polygon_i.Perimeter<<"\n";
+    (*ptr_polygon_i).Perimeter = count_Perimeter(ptr_polygon_i);
+    cout<<(*ptr_polygon_i).Perimeter<<"\n";
 
-    ptr_polygon_i.R_spoke = count_R_spoke(ptr_polygon_i);
-    ptr_polygon_i.S_area = count_S_area(ptr_polygon_i]);
+    (*ptr_polygon_i).R_spoke = count_R_spoke(ptr_polygon_i);
+    (*ptr_polygon_i).S_area = count_S_area(ptr_polygon_i);
 
-    cout<<ptr_polygon_i.R_spoke<<endl;
-    cout<<ptr_polygon_i.S_area<<endl;*/
+    cout<<(*ptr_polygon_i).R_spoke<<endl;
+    cout<<(*ptr_polygon_i).S_area<<endl;
 }
 /*
 void output_polygon() {
@@ -67,7 +67,7 @@ int main()
         catch(const bad_alloc& e) {
         cout<<"Error: "<<e.what()<<endl;
         }
-        polygon* ptr_polygon_i = ptr_polygones[i_polygones];
+        polygon* ptr_polygon_i = &ptr_polygones[i_polygones];
 
         input_polygon(ptr_polygon_i);
     }
