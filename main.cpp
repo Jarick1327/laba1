@@ -1,5 +1,5 @@
-#include <iostream>
-#include <math.h>
+#include <iostream> //ввод и вывод
+#include <math.h> //arcsin и sin
 
 using namespace std;
 const double pi = M_PI;
@@ -16,7 +16,67 @@ struct polygon{
     double R_spoke;
     double S_area;
     point V1;
+    point* ptr_array_vertaxes = new point [n_vertexes];
 };
+
+
+double count_Perimeter(polygon* ptr_polygon_i);
+double count_R_spoke(polygon* ptr_polygon_i);
+double count_S_area(polygon* ptr_polygon_i);
+
+void input_polygon(polygon* ptr_polygon_i);
+void show_polygon(polygon* ptr_polygon_i);
+void help();
+//void clear();
+//void back_to_menu();
+//void close();
+
+
+int main()
+{
+    setlocale(LC_ALL, "\Russian");
+    //по умолчанию 30 строчек
+
+    help();
+    char control_char = '0';
+    int i_polygones = -1;
+    polygon* ptr_polygones;
+
+    while (control_char != 'e') { //eng
+        cin>>control_char;
+
+        if (control_char == 'n') {
+        //создаём новый многоугольник
+            i_polygones = i_polygones+1;
+            try {
+                ptr_polygones = new polygon[i_polygones+1];
+            }
+            catch(const bad_alloc& e) {
+            cout<<"Error: "<<e.what()<<endl;
+            }
+            polygon* ptr_polygon_i = &ptr_polygones[i_polygones];
+
+            input_polygon(ptr_polygon_i);
+            show_polygon(ptr_polygon_i);
+
+            control_char = '0';
+        }
+
+        else if (control_char == 's' && (i_polygones+1) >=1) {
+        //выводим данные об одном многоугольнике
+
+            control_char = '0';
+        }
+        else if (control_char == 'd') {
+        //стираем один многоугольник
+
+            control_char = '0';
+        }
+    }
+
+    delete[] ptr_polygones;
+    return 0;
+}
 
 double count_Perimeter(polygon* ptr_polygon_i) {
     double Perimeter = (double)(*ptr_polygon_i).n_vertexes * (*ptr_polygon_i).a_side_length;
@@ -76,11 +136,11 @@ void help() {
     " Чтобы посмотреть характеристики многоугольника, введите s"<<endl<<
     " Чтобы завершить работу, введите (не готово)"<<endl<<
     //3 смысловые строчки и перевод
-    "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"<< //30-6 штук
+    //"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"<< //30-6 штук
     endl<<" "; //строка набора
 }
 
-void clear() {
+/*void clear() {
     cout<<"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"; //30 штук
 }
 
@@ -95,35 +155,4 @@ void back_to_menu() {
 void close() {
     clear();
     help();
-}
-
-int main()
-{
-    setlocale(LC_ALL, "\Russian");
-    //по умолчанию 30 строчек
-
-    help();
-    char input = '0';
-    int i_polygones = -1;
-    polygon* ptr_polygones;
-
-    cin>>input;
-    if (input == 'n') {
-        i_polygones = i_polygones+1;
-        try {
-            ptr_polygones = new polygon[i_polygones+1];
-        }
-        catch(const bad_alloc& e) {
-        cout<<"Error: "<<e.what()<<endl;
-        }
-        polygon* ptr_polygon_i = &ptr_polygones[i_polygones];
-
-        input_polygon(ptr_polygon_i);
-        show_polygon(ptr_polygon_i);
-    }
-
-
-
-    delete[] ptr_polygones;
-    return 0;
-}
+}*/
