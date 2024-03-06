@@ -1,8 +1,8 @@
-#include <iostream> //ввод и вывод
-#include <math.h> //arcsin и sin
+#include <iostream> //потоки ввода и вывода
+#include <math.h> //необходима arcsin и sin
 
-using namespace std;
-const double pi = M_PI;
+using namespace std; //cin cout
+const double pi = M_PI; //M_PI из math.h
 
 struct point {
     int x;
@@ -34,47 +34,66 @@ void help();
 
 int main()
 {
-    setlocale(LC_ALL, "\Russian");
-    //по умолчанию 30 строчек
+    setlocale(LC_ALL, "\Russian"); //разрешает использовать кириллицу
+    // (у меня на ноутбуке по умолчанию 30 строчек)
 
-    help();
-    char control_char = '0';
     int i_polygones = -1;
     polygon* ptr_polygones;
+    char control_char = '0';
 
     while (control_char != 'e') { //eng
+    //меню всей программы
+        help();
         cin>>control_char;
 
         if (control_char == 'n') {
         //создаём новый многоугольник
             i_polygones = i_polygones+1;
-            try {
-                ptr_polygones = new polygon[i_polygones+1];
+            if (i_polygones == 0) {
+                ptr_polygones = new polygon[0];
             }
-            catch(const bad_alloc& e) {
-            cout<<"Error: "<<e.what()<<endl;
+            if (i_polygones >0) {
+                polygon* temp = new polygon[i_polygones-1];
+                //скопируем в буфер введённые данные
+                for (int i=0; i<(i_polygones); i++){
+                    *(temp+i) = *(ptr_polygones+i);
+                }
+                //больший массив
+                ptr_polygones = new polygon[i_polygones];
+                //скопируем в увеличенный массив
+                for (int i=0; i<(i_polygones); i++){
+                    *(ptr_polygones+i) = *(temp+i);
+                }
             }
+            //добавим последнюю запись
             polygon* ptr_polygon_i = &ptr_polygones[i_polygones];
-
             input_polygon(ptr_polygon_i);
-            show_polygon(ptr_polygon_i);
+            //show_polygon(ptr_polygon_i);
 
             control_char = '0';
         }
 
         else if (control_char == 's' && (i_polygones+1) >=1) {
         //выводим данные об одном многоугольнике
-
+            cout<<"     Введите номер (от 1) интересующего многоугольника: ";
+            int number = 0;
+            //добавить проверку на -
+            cin>>number;
+            polygon* ptr_polygon_i = &ptr_polygones[number-1];
+            show_polygon(ptr_polygon_i);
             control_char = '0';
         }
-        else if (control_char == 'd') {
+
+        else if (control_char == 'd' && (i_polygones+1) >1) {
         //стираем один многоугольник
 
             control_char = '0';
         }
     }
 
+    //exit
     delete[] ptr_polygones;
+
     return 0;
 }
 
@@ -94,9 +113,9 @@ double count_S_area(polygon* ptr_polygon_i) {
 }
 
 void input_polygon(polygon* ptr_polygon_i) {
-    cout<<"     Введите число сторон: ";
+    cout<<"     Введите число вершин: ";
     cin>>(*ptr_polygon_i).n_vertexes;
-    //добавить проверку на адекват
+    //добавить проверку на !<3
     cout<<"     Введите длину стороны: ";
     cin>>(*ptr_polygon_i).a_side_length;
     (*ptr_polygon_i).Perimeter = count_Perimeter(ptr_polygon_i);
@@ -134,9 +153,12 @@ void help() {
     cout<<endl<< //1 строчка
     " Чтобы добавить многоугольник, введите n"<<endl<<
     " Чтобы посмотреть характеристики многоугольника, введите s"<<endl<<
-    " Чтобы завершить работу, введите (не готово)"<<endl<<
-    //3 смысловые строчки и перевод
-    //"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"<< //30-6 штук
+    " Чтобы изменить, введите с"<<endl<<
+    " Чтобы найти больший, введите b"<<endl<<
+    " Чтобы удалить, введите d"<<endl<<
+    " Чтобы завершить работу, латиницей введите e"<<endl<<
+    //6 смысловых строчек и 1 перевод
+    //"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"<< //30-9 штук
     endl<<" "; //строка набора
 }
 
