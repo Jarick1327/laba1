@@ -36,6 +36,7 @@ int main()
 {
     setlocale(LC_ALL, "\Russian"); //разрешает использовать кириллицу
     // (у меня на ноутбуке по умолчанию 30 строчек)
+    system("mode con lines=30");
 
     int i_polygones = -1;
     polygon* ptr_polygones;
@@ -43,7 +44,9 @@ int main()
 
     while (control_char != 'e') { //eng
     //меню всей программы
-        help();
+        //help();
+        cout<<endl<<" Многоугольников сейчас: "<<(i_polygones+1)<<endl;
+        cout<<" "; //строка набора, итого +2 строчки
         cin>>control_char;
 
         if (control_char == 'n') {
@@ -64,11 +67,11 @@ int main()
                 for (int i=0; i<(i_polygones); i++){
                     *(ptr_polygones+i) = *(temp+i);
                 }
+                delete[] temp;
             }
             //добавим последнюю запись
             polygon* ptr_polygon_i = &ptr_polygones[i_polygones];
             input_polygon(ptr_polygon_i);
-            //show_polygon(ptr_polygon_i);
 
             control_char = '0';
         }
@@ -86,6 +89,31 @@ int main()
 
         else if (control_char == 'd' && (i_polygones+1) >1) {
         //стираем один многоугольник
+            cout<<"     Введите номер (от 1) удаляемого многоугольника: ";
+            int number = 0;
+            //добавить проверку на -
+            cin>>number;
+            int index = number - 1;
+            //мы работаем с i-ым
+            //копируем в буфер
+            i_polygones = i_polygones-1;
+            if (i_polygones >= 0) {
+                polygon* temp = new polygon[i_polygones+1];
+                //скопируем в буфер введённые данные
+                for (int i=0; i<(i_polygones); i++){
+                    *(temp+i) = *(ptr_polygones+i);
+                }
+                //меньший массив
+                ptr_polygones = new polygon[i_polygones];
+                //скопируем в увменьшенный массив
+                for (int i=0; i<(index); i++){
+                    *(ptr_polygones+i) = *(temp+i);
+                }
+                for (int i=index; i<(i_polygones+1+1); i++){
+                    *(ptr_polygones+i) = *(temp+i+1);
+                }
+                delete[] temp;
+            }
 
             control_char = '0';
         }
@@ -156,10 +184,9 @@ void help() {
     " Чтобы изменить, введите с"<<endl<<
     " Чтобы найти больший, введите b"<<endl<<
     " Чтобы удалить, введите d"<<endl<<
-    " Чтобы завершить работу, латиницей введите e"<<endl<<
+    " Чтобы завершить работу, латиницей введите e"<<endl;
     //6 смысловых строчек и 1 перевод
-    //"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"<< //30-9 штук
-    endl<<" "; //строка набора
+    //"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"<< //30-8-2 штук
 }
 
 /*void clear() {
