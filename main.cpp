@@ -155,45 +155,57 @@ int main()
             for (int i=0; i<(i_polygones+1); i++){
                 *founder[i]=0;
             }
-            //если не с кем сравнивать
-            if (i_polygones == 0) {
-                cout<<endl<<endl<<"Единственный номер 1 - наибольший. P = "<<(*ptr_polygones).Perimeter<<endl;
-            }
-            //если есть, с кем сравнивать
-            else {
-                cout<<" Если хотите найти больший периметр, введите p"<<endl;
-                cout<<" Если хотите найти большую площадь, введите a ";
-                cin>>control_char;
-                polygon* ptr_polygon_i = &ptr_polygones[0];
-                if (control_char == 'p' || control_char == 'a') {
 
-                    //наибольший периметр
-                    if (control_char=='p') {
-                        double P_max = 0;
-                        for (int i=0; i<(i_polygones+1); i++){
-                            if (P_max < ((*(ptr_polygon_i+i)).Perimeter) ) {
-                                P_max = (*(ptr_polygon_i+i)).Perimeter;
-                            }
-                        }
-                        for (int i=0; i<(i_polygones+1); i++){
-                             if ( (*(ptr_polygon_i+i)).Perimeter == P_max ) {
-                                 *founder[i]=true;
-                             }
-                        }
-                        cout<<endl<<"       Наибольший периметр = "<<P_max<<endl<<
-                        "  Он у многоугольников под номерами:";
-                        for (int i=0; i<(i_polygones+1); i++) {
-                            if ( *founder[i] == 1) {
-                                cout<<" "<<(i+1)<<";"<<endl;
-                            }
-                        }
-                        cout<<" всё";
-                    }
-                    else if (control_char=='a') {
+            cout<<" Если хотите найти больший периметр, введите p"<<endl;
+            cout<<" Если хотите найти большую площадь, введите a ";
+            cin>>control_char;
+            polygon* ptr_polygon_i = &ptr_polygones[0];
+            if (control_char == 'p' || control_char == 'a') {
 
+                //наибольший периметр
+                if (control_char=='p') {
+                    double P_max = 0;
+                    for (int i=0; i<(i_polygones+1); i++){
+                        if (P_max < ((*(ptr_polygon_i+i)).Perimeter) ) {
+                            P_max = (*(ptr_polygon_i+i)).Perimeter;
+                        }
                     }
+                    for (int i=0; i<(i_polygones+1); i++){
+                            if ( (*(ptr_polygon_i+i)).Perimeter == P_max ) {
+                                *founder[i]=true;
+                            }
+                    }
+                    cout<<endl<<"       Наибольший периметр = "<<P_max<<endl<<
+                    "  Он у многоугольников под номерами:";
+                    for (int i=0; i<(i_polygones+1); i++) {
+                        if ( *founder[i] == 1) {
+                            cout<<" "<<(i+1)<<";"<<endl;
+                        }
+                    }
+                    cout<<" всё";
                 }
-
+                //наибольшая площадь
+                else if (control_char=='a') {
+                    double A_max = 0;
+                    for (int i=0; i<(i_polygones+1); i++){
+                        if (A_max < ((*(ptr_polygon_i+i)).S_area) ) {
+                            A_max = (*(ptr_polygon_i+i)).S_area;
+                        }
+                    }
+                    for (int i=0; i<(i_polygones+1); i++){
+                            if ( (*(ptr_polygon_i+i)).S_area == A_max ) {
+                                *founder[i]=true;
+                            }
+                    }
+                    cout<<endl<<"       Наибольшая площадь = "<<A_max<<endl<<
+                    "  Она у многоугольников под номерами:";
+                    for (int i=0; i<(i_polygones+1); i++) {
+                        if ( *founder[i] == 1) {
+                            cout<<" "<<(i+1)<<";"<<endl;
+                        }
+                    }
+                    cout<<" всё";
+                }
             }
 
             control_char = '0';
