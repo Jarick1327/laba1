@@ -27,6 +27,9 @@ double count_S_area(polygon* ptr_polygon_i);
 void input_polygon(polygon* ptr_polygon_i);
 void show_polygon(polygon* ptr_polygon_i);
 void help();
+
+void change_perimeter(polygon* ptr_polygon_i);
+void change_area(polygon* ptr_polygon_i);
 //void clear();
 //void back_to_menu();
 //void close();
@@ -117,6 +120,32 @@ int main()
 
             control_char = '0';
         }
+
+        else if (control_char == 'c' && (i_polygones+1) >=1) {
+            cout<<" Если хотите задать новый периметр, введите p"<<endl;
+            cout<<" Если хотите задать новую площадь, введите a ";
+            cin>>control_char;
+            if (control_char == 'p' || control_char == 'a') {
+                if (control_char=='p') {
+                    cout<<"     Введите номер (от 1) изменяемого многоугольника: ";
+                    int number = 0;
+                    //добавить проверку на -
+                    cin>>number;
+                    polygon* ptr_polygon_i = &ptr_polygones[number-1];
+                    change_perimeter(ptr_polygon_i);
+                }
+                else if (control_char=='a') {
+                    cout<<"     Введите номер (от 1) изменяемого многоугольника: ";
+                    int number = 0;
+                    //добавить проверку на -
+                    cin>>number;
+                    polygon* ptr_polygon_i = &ptr_polygones[number-1];
+                    change_area(ptr_polygon_i);
+                }
+            }
+
+            control_char = '0';
+        }
     }
 
     //exit
@@ -187,6 +216,30 @@ void help() {
     " Чтобы завершить работу, латиницей введите e"<<endl;
     //6 смысловых строчек и 1 перевод
     //"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"<< //30-8-2 штук
+}
+
+void change_perimeter(polygon* ptr_polygon_i) {
+    double new_Perimeter;
+    cout<<"     Введите новый периметр: ";
+    cin>>new_Perimeter;
+    //cout << endl<<new_Perimeter;
+    (*ptr_polygon_i).Perimeter = new_Perimeter;
+    (*ptr_polygon_i).a_side_length = new_Perimeter/( (double)(*ptr_polygon_i).n_vertexes );
+    //формулы R и S не изменились
+    (*ptr_polygon_i).R_spoke = count_R_spoke(ptr_polygon_i);
+    (*ptr_polygon_i).S_area = count_S_area(ptr_polygon_i);
+}
+
+void change_area(polygon* ptr_polygon_i) {
+    double new_Area;
+    cout<<"     Введите новую площадь: ";
+    cin>>new_Area;
+    //cout << endl<<new_Area;
+    (*ptr_polygon_i).S_area = new_Area;
+    (*ptr_polygon_i).R_spoke = pow ( ((2*(*ptr_polygon_i).S_area) / ( ((double)(*ptr_polygon_i).n_vertexes) * sin(2*pi/((double)(*ptr_polygon_i).n_vertexes)) )), 0.5 );
+    (*ptr_polygon_i).a_side_length = ((*ptr_polygon_i).R_spoke) / (2*sin(pi/ ((double)(*ptr_polygon_i).n_vertexes) ));
+    //формула P не изменилась
+    (*ptr_polygon_i).Perimeter = count_Perimeter(ptr_polygon_i);
 }
 
 /*void clear() {
