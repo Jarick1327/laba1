@@ -53,6 +53,7 @@ int main()
         help();
         cout<<endl<<" Многоугольников сейчас: "<<(i_polygones+1)<<endl;
         cout<<" "; //строка набора, итого +2 строчки
+        //cout<<"input";
         cin>>control_char;
 
         if (control_char == 'n') {
@@ -73,10 +74,11 @@ int main()
                 for (int i=0; i<(i_polygones); i++){
                     *(ptr_polygones+i) = *(temp+i);
                 }
+                cout<<" "<<endl;
                 delete[] temp;
             }
             //добавим последнюю запись
-            polygon* ptr_polygon_i = &ptr_polygones[i_polygones+1];
+            polygon* ptr_polygon_i = &ptr_polygones[i_polygones];
             input_polygon(ptr_polygon_i);
 
             control_char = '0';
@@ -104,25 +106,36 @@ int main()
             //копируем в буфер
             i_polygones = i_polygones-1;
             if (i_polygones >= 0) {
+                //cout<<"11"<<endl;
                 polygon* temp = new polygon[i_polygones+1+1];
                 //скопируем в буфер введённые данные
                 for (int i=0; i<(i_polygones+1+1); i++){
+                    //cout<<"22"<<endl;
                     *(temp+i) = *(ptr_polygones+i);
                 }
                 //меньший массив
                 ptr_polygones = new polygon[i_polygones+1];
                 //скопируем в увменьшенный массив
                 for (int i=0; i<(index); i++){
+                    //cout<<"33"<<endl;
                     *(ptr_polygones+i) = *(temp+i);
+                    cout<<" "<<endl;
                 }
-                for (int i=index; i<(i_polygones+1+1); i++){
-                    *(ptr_polygones+i) = *(temp+i+1);
+                //если удаляется не последний
+                if ( index!=(i_polygones+1) ) {
+                    for (int i=index; i<(i_polygones+1); i++){
+                        cout<<"44"<<endl;
+                        *(ptr_polygones+i) = *(temp+i+1);
+                        cout<<" "<<endl;
+                    }
                 }
                 delete[] temp;
             }
             else {
                 i_polygones = i_polygones+1;
+                //cout<<"no"<<endl;
             }
+            //cout<<"ggg";
             control_char = '0';
         }
 
@@ -154,9 +167,10 @@ int main()
         }
 
         else if (control_char == 'b' && (i_polygones+1) >=1) {
-            bool* founder[i_polygones+1];
+        //нахождение наибольшего
+            bool* founder = new bool[i_polygones+1];
             for (int i=0; i<(i_polygones+1); i++){
-                *founder[i]=0;
+                *(founder+i)=0;
             }
 
             cout<<" Если хотите найти больший периметр, введите p"<<endl;
@@ -175,17 +189,17 @@ int main()
                     }
                     for (int i=0; i<(i_polygones+1); i++){
                             if ( (*(ptr_polygon_i+i)).Perimeter == P_max ) {
-                                *founder[i]=true;
+                                *(founder+i)=true;
                             }
                     }
                     cout<<endl<<"       Наибольший периметр = "<<P_max<<endl<<
-                    "  Он у многоугольников под номерами:";
+                    "       Он у многоугольников под номерами:";
                     for (int i=0; i<(i_polygones+1); i++) {
-                        if ( *founder[i] == 1) {
-                            cout<<" "<<(i+1)<<";"<<endl;
+                        if ( *(founder+i) == 1) {
+                            cout<<" "<<(i+1)<<";";
                         }
                     }
-                    cout<<" всё";
+                    cout<<" всё"<<endl;
                 }
                 //наибольшая площадь
                 else if (control_char=='a') {
@@ -197,17 +211,17 @@ int main()
                     }
                     for (int i=0; i<(i_polygones+1); i++){
                             if ( (*(ptr_polygon_i+i)).S_area == A_max ) {
-                                *founder[i]=true;
+                                *(founder+i)=true;
                             }
                     }
                     cout<<endl<<"       Наибольшая площадь = "<<A_max<<endl<<
-                    "  Она у многоугольников под номерами:";
+                    "       Она у многоугольников под номерами:";
                     for (int i=0; i<(i_polygones+1); i++) {
-                        if ( *founder[i] == 1) {
-                            cout<<" "<<(i+1)<<";"<<endl;
+                        if ( *(founder+i) == 1) {
+                            cout<<" "<<(i+1)<<";";
                         }
                     }
-                    cout<<" всё";
+                    cout<<" всё"<<endl;
                 }
             }
 
@@ -223,6 +237,7 @@ int main()
 
             control_char = '0';
         }
+
     //конец while
     }
 
@@ -253,6 +268,7 @@ void input_polygon(polygon* ptr_polygon_i) {
     //добавить проверку на !<3
     cout<<"     Введите длину стороны: ";
     cin>>(*ptr_polygon_i).a_side_length;
+
     (*ptr_polygon_i).Perimeter = count_Perimeter(ptr_polygon_i);
 
     (*ptr_polygon_i).R_spoke = count_R_spoke(ptr_polygon_i);
@@ -321,6 +337,7 @@ void change_area(polygon* ptr_polygon_i) {
     (*ptr_polygon_i).Perimeter = count_Perimeter(ptr_polygon_i);
 }
 
+//исправить, все вершины почему-то одинаковые!
 void vertexes_calculate(polygon* ptr_polygon_i) {
     //пусть угол фи между OX и осью многоугольника
     double angle_phi = asin( ((*ptr_polygon_i).V1).y / ( pow( ((*ptr_polygon_i).V1).x, 2.0 )+pow( ((*ptr_polygon_i).V1).y, 2.0 ) ) );
@@ -328,18 +345,21 @@ void vertexes_calculate(polygon* ptr_polygon_i) {
     double angle_a = ( ((*ptr_polygon_i).n_vertexes)-2 )*pi /( (*ptr_polygon_i).n_vertexes );
     point vector_to_center;
     vector_to_center.x = ((*ptr_polygon_i).V1).x - ( (*ptr_polygon_i).R_spoke * cos(angle_phi) );
+    cout<<endl<<vector_to_center.x<<endl;
     vector_to_center.y = ((*ptr_polygon_i).V1).y - ( (*ptr_polygon_i).R_spoke * sin(angle_phi) );
+    cout<<endl<<vector_to_center.y<<endl;
 
     point* array_vertexes = new point[ (*ptr_polygon_i).n_vertexes ];
     for (int i=0; i<( (*ptr_polygon_i).n_vertexes ); i++) {
-        ( *(array_vertexes+i) ).x = ((*ptr_polygon_i).R_spoke * cos( angle_phi + pi - angle_a )) + vector_to_center.x;
-        ( *(array_vertexes+i) ).y = ((*ptr_polygon_i).R_spoke * sin( angle_phi + pi - angle_a )) + vector_to_center.y;
+        ( *(array_vertexes+i) ).x = ( (*ptr_polygon_i).R_spoke * cos( angle_phi + i*(pi - angle_a ) ) )+ vector_to_center.x;
+        ( *(array_vertexes+i) ).y = ( (*ptr_polygon_i).R_spoke * sin( angle_phi + i*(pi - angle_a ) ) )+ vector_to_center.y;
     }
 
     cout<<endl;
     for (int i=0; i<( (*ptr_polygon_i).n_vertexes ); i++) {
-        cout<<endl<<i<<"    x = "<< ( *(array_vertexes+i) ).x <<"   y = "<< ( *(array_vertexes+i) ).y;
+        cout<<endl<<"       "<<i<<"    x = "<< ( *(array_vertexes+i) ).x <<"   y = "<< ( *(array_vertexes+i) ).y;
     }
+    cout<<endl;
 }
 
 /*void clear() {
