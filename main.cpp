@@ -56,16 +56,16 @@ int main()
         //создаём новый многоугольник
             i_polygones = i_polygones+1;
             if (i_polygones == 0) {
-                ptr_polygones = new polygon[0];
+                ptr_polygones = new polygon[1];
             }
             if (i_polygones >0) {
-                polygon* temp = new polygon[i_polygones-1];
+                polygon* temp = new polygon[i_polygones];
                 //скопируем в буфер введённые данные
                 for (int i=0; i<(i_polygones); i++){
                     *(temp+i) = *(ptr_polygones+i);
                 }
                 //больший массив
-                ptr_polygones = new polygon[i_polygones];
+                ptr_polygones = new polygon[i_polygones+1];
                 //скопируем в увеличенный массив
                 for (int i=0; i<(i_polygones); i++){
                     *(ptr_polygones+i) = *(temp+i);
@@ -73,7 +73,7 @@ int main()
                 delete[] temp;
             }
             //добавим последнюю запись
-            polygon* ptr_polygon_i = &ptr_polygones[i_polygones];
+            polygon* ptr_polygon_i = &ptr_polygones[i_polygones+1];
             input_polygon(ptr_polygon_i);
 
             control_char = '0';
@@ -101,13 +101,13 @@ int main()
             //копируем в буфер
             i_polygones = i_polygones-1;
             if (i_polygones >= 0) {
-                polygon* temp = new polygon[i_polygones+1];
+                polygon* temp = new polygon[i_polygones+1+1];
                 //скопируем в буфер введённые данные
-                for (int i=0; i<(i_polygones); i++){
+                for (int i=0; i<(i_polygones+1+1); i++){
                     *(temp+i) = *(ptr_polygones+i);
                 }
                 //меньший массив
-                ptr_polygones = new polygon[i_polygones];
+                ptr_polygones = new polygon[i_polygones+1];
                 //скопируем в увменьшенный массив
                 for (int i=0; i<(index); i++){
                     *(ptr_polygones+i) = *(temp+i);
@@ -117,7 +117,9 @@ int main()
                 }
                 delete[] temp;
             }
-
+            else {
+                i_polygones = i_polygones+1;
+            }
             control_char = '0';
         }
 
@@ -150,6 +152,9 @@ int main()
 
         else if (control_char == 'b' && (i_polygones+1) >=1) {
             bool* founder[i_polygones+1];
+            for (int i=0; i<(i_polygones+1); i++){
+                *founder[i]=0;
+            }
             //если не с кем сравнивать
             if (i_polygones == 0) {
                 cout<<endl<<endl<<"Единственный номер 1 - наибольший. P = "<<(*ptr_polygones).Perimeter<<endl;
@@ -159,13 +164,30 @@ int main()
                 cout<<" Если хотите найти больший периметр, введите p"<<endl;
                 cout<<" Если хотите найти большую площадь, введите a ";
                 cin>>control_char;
+                polygon* ptr_polygon_i = &ptr_polygones[0];
                 if (control_char == 'p' || control_char == 'a') {
-                    if (control_char=='p') {
-                        double P_max=(*ptr_polygon_i).Perimeter;
-                        for (int i=0; i<(i_polygones+1); i++){
-                            P_max = (*ptr_polygon_i).Perimeter;
-                        }
 
+                    //наибольший периметр
+                    if (control_char=='p') {
+                        double P_max = 0;
+                        for (int i=0; i<(i_polygones+1); i++){
+                            if (P_max < ((*(ptr_polygon_i+i)).Perimeter) ) {
+                                P_max = (*(ptr_polygon_i+i)).Perimeter;
+                            }
+                        }
+                        for (int i=0; i<(i_polygones+1); i++){
+                             if ( (*(ptr_polygon_i+i)).Perimeter == P_max ) {
+                                 *founder[i]=true;
+                             }
+                        }
+                        cout<<endl<<"       Наибольший периметр = "<<P_max<<endl<<
+                        "  Он у многоугольников под номерами:";
+                        for (int i=0; i<(i_polygones+1); i++) {
+                            if ( *founder[i] == 1) {
+                                cout<<" "<<(i+1)<<";"<<endl;
+                            }
+                        }
+                        cout<<" всё";
                     }
                     else if (control_char=='a') {
 
