@@ -30,6 +30,9 @@ void help();
 
 void change_perimeter(polygon* ptr_polygon_i);
 void change_area(polygon* ptr_polygon_i);
+
+void vertexes_calculate(polygon* ptr_polygon_i);
+
 //void clear();
 //void back_to_menu();
 //void close();
@@ -47,7 +50,7 @@ int main()
 
     while (control_char != 'e') { //eng
     //меню всей программы
-        //help();
+        help();
         cout<<endl<<" Многоугольников сейчас: "<<(i_polygones+1)<<endl;
         cout<<" "; //строка набора, итого +2 строчки
         cin>>control_char;
@@ -210,6 +213,16 @@ int main()
 
             control_char = '0';
         }
+
+        else if (control_char == 'v' && (i_polygones+1) >=1) {
+            cout<<"     Введите номер (от 1) многоугольника для расчёта вершин: ";
+            int number;
+            cin>>number;
+            polygon* ptr_polygon_i = &ptr_polygones[number-1];
+            vertexes_calculate(ptr_polygon_i);
+
+            control_char = '0';
+        }
     //конец while
     }
 
@@ -278,9 +291,10 @@ void help() {
     " Чтобы изменить, введите с"<<endl<<
     " Чтобы найти больший, введите b"<<endl<<
     " Чтобы удалить, введите d"<<endl<<
+    " Чтобы просчитать вершины, введите v"<<endl<<
     " Чтобы завершить работу, латиницей введите e"<<endl;
-    //6 смысловых строчек и 1 перевод
-    //"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"<< //30-8-2 штук
+    //7 смысловых строчек и 1 перевод
+    //"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"<< //30-9-2 штук
 }
 
 void change_perimeter(polygon* ptr_polygon_i) {
@@ -305,6 +319,27 @@ void change_area(polygon* ptr_polygon_i) {
     (*ptr_polygon_i).a_side_length = ((*ptr_polygon_i).R_spoke) / (2*sin(pi/ ((double)(*ptr_polygon_i).n_vertexes) ));
     //формула P не изменилась
     (*ptr_polygon_i).Perimeter = count_Perimeter(ptr_polygon_i);
+}
+
+void vertexes_calculate(polygon* ptr_polygon_i) {
+    //пусть угол фи между OX и осью многоугольника
+    double angle_phi = asin( ((*ptr_polygon_i).V1).y / ( pow( ((*ptr_polygon_i).V1).x, 2.0 )+pow( ((*ptr_polygon_i).V1).y, 2.0 ) ) );
+    //пусть угол альфа - внутренний угол правильного n-угольника
+    double angle_a = ( ((*ptr_polygon_i).n_vertexes)-2 )*pi /( (*ptr_polygon_i).n_vertexes );
+    point vector_to_center;
+    vector_to_center.x = ((*ptr_polygon_i).V1).x - ( (*ptr_polygon_i).R_spoke * cos(angle_phi) );
+    vector_to_center.y = ((*ptr_polygon_i).V1).y - ( (*ptr_polygon_i).R_spoke * sin(angle_phi) );
+
+    point* array_vertexes = new point[ (*ptr_polygon_i).n_vertexes ];
+    for (int i=0; i<( (*ptr_polygon_i).n_vertexes ); i++) {
+        ( *(array_vertexes+i) ).x = ((*ptr_polygon_i).R_spoke * cos( angle_phi + pi - angle_a )) + vector_to_center.x;
+        ( *(array_vertexes+i) ).y = ((*ptr_polygon_i).R_spoke * sin( angle_phi + pi - angle_a )) + vector_to_center.y;
+    }
+
+    cout<<endl;
+    for (int i=0; i<( (*ptr_polygon_i).n_vertexes ); i++) {
+        cout<<endl<<i<<"    x = "<< ( *(array_vertexes+i) ).x <<"   y = "<< ( *(array_vertexes+i) ).y;
+    }
 }
 
 /*void clear() {
