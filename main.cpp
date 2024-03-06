@@ -122,6 +122,7 @@ int main()
         }
 
         else if (control_char == 'c' && (i_polygones+1) >=1) {
+        //изменение периметра или площади
             cout<<" Если хотите задать новый периметр, введите p"<<endl;
             cout<<" Если хотите задать новую площадь, введите a ";
             cin>>control_char;
@@ -146,6 +147,36 @@ int main()
 
             control_char = '0';
         }
+
+        else if (control_char == 'b' && (i_polygones+1) >=1) {
+            bool* founder[i_polygones+1];
+            //если не с кем сравнивать
+            if (i_polygones == 0) {
+                cout<<endl<<endl<<"Единственный номер 1 - наибольший. P = "<<(*ptr_polygones).Perimeter<<endl;
+            }
+            //если есть, с кем сравнивать
+            else {
+                cout<<" Если хотите найти больший периметр, введите p"<<endl;
+                cout<<" Если хотите найти большую площадь, введите a ";
+                cin>>control_char;
+                if (control_char == 'p' || control_char == 'a') {
+                    if (control_char=='p') {
+                        double P_max=(*ptr_polygon_i).Perimeter;
+                        for (int i=0; i<(i_polygones+1); i++){
+                            P_max = (*ptr_polygon_i).Perimeter;
+                        }
+
+                    }
+                    else if (control_char=='a') {
+
+                    }
+                }
+
+            }
+
+            control_char = '0';
+        }
+    //конец while
     }
 
     //exit
